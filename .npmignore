@@ -1,0 +1,9 @@
+node_modules
+coverage/
+output/
+test/
+tmp/
+src/
+*.log
+*.tgz
+.*
