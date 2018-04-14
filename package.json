@@ -31,6 +31,11 @@
     "readme": "markedpp --githubid -i README.md -o README.md",
     "test": "mocha"
   },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
   "eslintConfig": {
     "extends": "standard",
     "plugins": [
