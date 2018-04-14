@@ -1,9 +1,7 @@
 'use strict'
 
 const moment = require('moment-timezone')
-const toNumber = require('./utils').toNumber
-const isDate = require('./utils').isDate
-const pad0 = require('./utils').pad0
+const {toNumber, isDate, pad0} = require('./utils')
 
 const PROPS = ['year', 'month', 'day', 'hour', 'minute', 'second']
 
@@ -12,8 +10,8 @@ class CalDate {
    * constructs a new CalDate instance
    * @param {Object|Date} [opts] - See `set(opts)`
    * @example
-   * var CalDate = require('caldate')
-   * var caldate = new CalDate('2000-01-01 12:00:00')
+   * const CalDate = require('caldate')
+   * const caldate = new CalDate('2000-01-01 12:00:00')
    * caldate.year
    * //> 2000
    * caldate.month
@@ -60,7 +58,7 @@ class CalDate {
    * @return {Boolean} true if date matches
    */
   isEqualDate (calDate) {
-    var res = true
+    let res = true
     this.update()
     ;['year', 'month', 'day'].forEach((p) => {
       res &= (this[p] === calDate[p])
@@ -94,7 +92,7 @@ class CalDate {
         throw new Error('Number required')
       }
 
-      var o = { day: 0 }
+      const o = { day: 0 }
       if (unit === 'd') {
         o.day = number | 0
         number -= o.day
@@ -155,7 +153,7 @@ class CalDate {
    */
   update () {
     if (this.year) {
-      var d = new CalDate(this.toDate())
+      const d = new CalDate(this.toDate())
       PROPS.forEach((p) => {
         this[p] = d[p]
       })
@@ -168,7 +166,7 @@ class CalDate {
    * @return {CalDate}
    */
   toEndDate () {
-    var d = new CalDate(this.toDate())
+    const d = new CalDate(this.toDate())
     d.minute += ((this.duration * 60) | 0)
     d.update()
     return d
@@ -209,7 +207,7 @@ class CalDate {
    * get Date as String `YYYY-MM-DD HH:MM:SS`
    */
   toString (iso) {
-    var d = new CalDate(this.toDate())
+    const d = new CalDate(this.toDate())
     return (
       pad0(d.year, 4) + '-' +
       pad0(d.month) + '-' +

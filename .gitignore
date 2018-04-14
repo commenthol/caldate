@@ -4,3 +4,4 @@ tmp/
 *.log
 *.tgz
 .eslintcache
+.nyc_output/

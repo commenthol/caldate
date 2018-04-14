@@ -1,14 +1,12 @@
-'use strict'
-
 function objectToString (o) {
   return Object.prototype.toString.call(o)
 }
 
-var isObject = exports.isObject = function (arg) {
+const isObject = exports.isObject = function (arg) {
   return typeof arg === 'object' && arg !== null
 }
 
-var isDate = exports.isDate = function (d) {
+const isDate = exports.isDate = function (d) {
   return isObject(d) && objectToString(d) === '[object Date]'
 }
 
@@ -30,8 +28,8 @@ exports.pad0 = function pad0 (number, len) {
  * @param {String} str
  * @return {Number} converted number or undefined
  */
-var toNumber = exports.toNumber = function toNumber (str) {
-  var num = parseInt(str, 10)
+const toNumber = exports.toNumber = function toNumber (str) {
+  const num = parseInt(str, 10)
   if (!isNaN(num)) {
     return num
   }
