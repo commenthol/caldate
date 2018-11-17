@@ -1,7 +1,7 @@
 'use strict'
 
 const moment = require('moment-timezone')
-const {toNumber, isDate, pad0} = require('./utils')
+const { toNumber, isDate, pad0 } = require('./utils')
 
 const PROPS = ['year', 'month', 'day', 'hour', 'minute', 'second']
 
