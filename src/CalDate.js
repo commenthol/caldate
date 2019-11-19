@@ -186,9 +186,9 @@ class CalDate {
   }
 
   /**
-   * set date from a given timezone
-   * @param {Date} dateUTC
-   * @param {String} [timezone] - timezone of dateUTC
+   * set date from a given `timezone`
+   * @param {Date} dateUTC - date in UTC
+   * @param {String} [timezone] - timezone of dateUTC, e.g. 'America/New_York'
    * @return {CalDate} self
    */
   fromTimezone (dateUTC, timezone) {
