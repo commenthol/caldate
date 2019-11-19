@@ -186,6 +186,27 @@ class CalDate {
   }
 
   /**
+   * set date from a given timezone
+   * @param {Date} dateUTC
+   * @param {String} [timezone] - timezone of dateUTC
+   * @return {CalDate} self
+   */
+  fromTimezone (dateUTC, timezone) {
+    if (timezone) {
+      const m = moment.tz(dateUTC, timezone)
+      this.year = m.year()
+      this.month = m.month() + 1
+      this.day = m.date()
+      this.hour = m.hours()
+      this.minute = m.minutes()
+      this.second = m.seconds()
+    } else {
+      this.set(dateUTC)
+    }
+    return this
+  }
+
+  /**
    * convert to Date
    * @return {Date}
    */
