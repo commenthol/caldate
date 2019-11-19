@@ -148,6 +148,18 @@ move internal date to a date in `timezone`
 
 **Returns**: `Date`
 
+### CalDate.fromTimezone(dateUTC, timezone)
+
+set date from a given `timezone`
+
+**Parameters**
+
+**dateUTC**: `Date`, date in UTC
+
+**timezone**: `String`, timezone of dateUTC, e.g. 'America/New_York'
+
+**Returns**: `CalDate` self
+
 ### CalDate.toDate()
 
 convert to Date

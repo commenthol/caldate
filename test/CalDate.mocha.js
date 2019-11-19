@@ -107,6 +107,14 @@ describe('#CalDate', function () {
     assert.strictEqual(res, exp.toISOString())
   })
 
+  it('can set date for timezone', function () {
+    var caldate = new CalDate()
+    caldate.fromTimezone(
+      new Date('2016-12-31T13:00:00Z'), 'Australia/Sydney'
+    )
+    assert.strictEqual(caldate.toString(), '2017-01-01 00:00:00')
+  })
+
   it('can return a end date', function () {
     var caldate = new CalDate(new Date('2000-01-01 00:00:00'))
     var res = caldate.toEndDate().toISOString()
