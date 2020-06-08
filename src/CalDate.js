@@ -77,7 +77,7 @@ class CalDate {
   /**
    * set offset per unit
    * @param {Number} number
-   * @param {String} unit - Unit in days `d`, hours `h, minutes `m`
+   * @param {String} [unit='d'] - Unit in days `d`, hours `h, minutes `m`
    * @return {Object} this
    */
   setOffset (number, unit) {
