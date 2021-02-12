@@ -1,11 +1,10 @@
-'use strict'
 
-const moment = require('moment-timezone')
-const { toNumber, isDate, pad0 } = require('./utils')
+import moment from 'moment-timezone'
+import { toYear, toNumber, isDate, pad0 } from './utils.js'
 
 const PROPS = ['year', 'month', 'day', 'hour', 'minute', 'second']
 
-class CalDate {
+export class CalDate {
   /**
    * constructs a new CalDate instance
    * @param {Object|Date} [opts] - See `set(opts)`
@@ -19,6 +18,10 @@ class CalDate {
    */
   constructor (opts) {
     this.set(opts)
+  }
+
+  static toYear (year) {
+    return toYear(year)
   }
 
   /**
@@ -241,4 +244,3 @@ class CalDate {
     )
   }
 }
-module.exports = CalDate

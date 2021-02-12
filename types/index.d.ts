@@ -1,5 +1,3 @@
-// TypeScript Version: 3.3
-
 declare module 'caldate' {
   export interface Options {
     year?: string | number;
@@ -28,4 +26,6 @@ declare module 'caldate' {
     toISOString(): string;
     toString(): string;
   }
+
+  export default CalDate;
 }
