@@ -1,10 +1,7 @@
 node_modules/
 coverage/
-output/
 test/
 tmp/
 *.log
 *.tgz
 .*
-package-lock.json
-yarn.lock

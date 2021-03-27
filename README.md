@@ -43,8 +43,12 @@ constructs a new CalDate instance
 
 **Example**:
 ```js
-var CalDate = require('caldate')
-var caldate = new CalDate('2000-01-01 12:00:00')
+// ES5
+import CalDate from 'caldate'
+// cjs
+const CalDate = require('caldate')
+
+const caldate = new CalDate('2000-01-01 12:00:00')
 caldate.year
 //> 2000
 caldate.month
@@ -174,8 +178,6 @@ get Date in ISO format
 ### CalDate.toString()
 
 get Date as String `YYYY-MM-DD HH:MM:SS`
-
-
 
 
 ## Contribution and License Agreement
