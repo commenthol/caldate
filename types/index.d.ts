@@ -9,7 +9,7 @@ declare module 'caldate' {
     duration?: string | number;
   }
 
-  export class CalDate {
+  class CalDate {
     constructor(opts?: Date | Options);
 
     set(opts?: Date | Options): CalDate;

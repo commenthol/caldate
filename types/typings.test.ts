@@ -1,4 +1,4 @@
-import { CalDate } from 'caldate';
+import CalDate from 'caldate';
 
 const cd = new CalDate(); // $ExpectType CalDate
 
