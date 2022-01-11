@@ -3,7 +3,7 @@
 > calendar date for date-holidays
 
 [![NPM version](https://badge.fury.io/js/caldate.svg)](https://www.npmjs.com/package/caldate/)
-[![Build Status](https://secure.travis-ci.org/commenthol/caldate.svg?branch=master)](https://travis-ci.org/commenthol/caldate)
+[![Build Status](https://github.com/commenthol/caldate/workflows/CI/badge.svg?branch=master&event=push)](https://github.com/commenthol/caldate/actions/workflows/ci.yml?query=branch%3Amaster)
 
 
 ## Table of Contents
