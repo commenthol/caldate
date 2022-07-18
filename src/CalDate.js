@@ -1,5 +1,4 @@
-
-import moment from 'moment-timezone'
+import { DateTime } from 'luxon'
 import { toYear, toNumber, isDate, pad0 } from './utils.js'
 
 const PROPS = ['year', 'month', 'day', 'hour', 'minute', 'second']
@@ -182,7 +181,22 @@ export class CalDate {
    */
   toTimezone (timezone) {
     if (timezone) {
-      return new Date(moment.tz(this.toString(), timezone).format())
+      return DateTime.fromObject(
+        {
+          day: this.day,
+          month: this.month,
+          year: this.year,
+          hour: this.hour,
+          minute: this.minute,
+          second: this.second,
+          millisecond: 0
+        },
+        {
+          zone: timezone
+        }
+      )
+        .toUTC()
+        .toJSDate()
     } else {
       return this.toDate()
     }
@@ -196,13 +210,13 @@ export class CalDate {
    */
   fromTimezone (dateUTC, timezone) {
     if (timezone) {
-      const m = moment.tz(dateUTC, timezone)
-      this.year = m.year()
-      this.month = m.month() + 1
-      this.day = m.date()
-      this.hour = m.hours()
-      this.minute = m.minutes()
-      this.second = m.seconds()
+      const m = DateTime.fromJSDate(dateUTC, { zone: timezone })
+      this.year = m.year
+      this.month = m.month
+      this.day = m.day
+      this.hour = m.hour
+      this.minute = m.minute
+      this.second = m.second
     } else {
       this.set(dateUTC)
     }
@@ -215,8 +229,13 @@ export class CalDate {
    */
   toDate () {
     return new Date(
-      this.year, this.month - 1, this.day,
-      this.hour, this.minute, this.second, 0
+      this.year,
+      this.month - 1,
+      this.day,
+      this.hour,
+      this.minute,
+      this.second,
+      0
     )
   }
 
