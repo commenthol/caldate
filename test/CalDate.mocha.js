@@ -96,6 +96,24 @@ describe('#CalDate', function () {
     assert.strictEqual(res, '2000-01-01T05:00:00.000Z')
   })
 
+  it('can move date by timezone Tokyo (march 2015)', function () {
+    const caldate = new CalDate(new Date('2015-03-21 00:00:00'))
+    const res = caldate.toTimezone('Asia/Tokyo').toISOString()
+    assert.strictEqual(res, '2015-03-20T15:00:00.000Z')
+  })
+
+  it('can move date by timezone Tokyo (sepetember 2015)', function () {
+    const caldate = new CalDate(new Date('2015-09-23 00:00:00'))
+    const res = caldate.toTimezone('Asia/Tokyo').toISOString()
+    assert.strictEqual(res, '2015-09-22T15:00:00.000Z')
+  })
+
+  it('can move date by timezone Tokyo (sepetember 2021)', function () {
+    const caldate = new CalDate(new Date('2021-09-23 00:00:00'))
+    const res = caldate.toTimezone('Asia/Tokyo').toISOString()
+    assert.strictEqual(res, '2021-09-22T15:00:00.000Z')
+  })
+
   it('can return date in current timezone', function () {
     const caldate = new CalDate({ year: 2000, month: 1, day: 1 })
     const exp = new Date('2000-01-01 00:00:00')

@@ -54,7 +54,7 @@
     "colors": true
   },
   "dependencies": {
-    "moment-timezone": "^0.5.34"
+    "luxon": "^3.0.1"
   },
   "devDependencies": {
     "c8": "^7.11.3",
