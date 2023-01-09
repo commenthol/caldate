@@ -1,6 +1,5 @@
-
-import moment from 'moment-timezone'
 import { toYear, toNumber, isDate, pad0 } from './utils.js'
+import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz/esm'
 
 const PROPS = ['year', 'month', 'day', 'hour', 'minute', 'second']
 
@@ -182,7 +181,7 @@ export class CalDate {
    */
   toTimezone (timezone) {
     if (timezone) {
-      return new Date(moment.tz(this.toString(), timezone).format())
+      return zonedTimeToUtc(this.toString(), timezone)
     } else {
       return this.toDate()
     }
@@ -196,13 +195,13 @@ export class CalDate {
    */
   fromTimezone (dateUTC, timezone) {
     if (timezone) {
-      const m = moment.tz(dateUTC, timezone)
-      this.year = m.year()
-      this.month = m.month() + 1
-      this.day = m.date()
-      this.hour = m.hours()
-      this.minute = m.minutes()
-      this.second = m.seconds()
+      const m = utcToZonedTime(dateUTC, timezone)
+      this.year = m.getFullYear()
+      this.month = m.getMonth() + 1
+      this.day = m.getDate()
+      this.hour = m.getHours()
+      this.minute = m.getMinutes()
+      this.second = m.getSeconds()
     } else {
       this.set(dateUTC)
     }

@@ -96,6 +96,12 @@ describe('#CalDate', function () {
     assert.strictEqual(res, '2000-01-01T05:00:00.000Z')
   })
 
+  it('can move date by timezone with daylight saving offset', function () {
+    const caldate = new CalDate(new Date('2000-07-01 00:00:00'))
+    const res = caldate.toTimezone('America/New_York').toISOString()
+    assert.strictEqual(res, '2000-07-01T04:00:00.000Z')
+  })
+
   it('can return date in current timezone', function () {
     const caldate = new CalDate({ year: 2000, month: 1, day: 1 })
     const exp = new Date('2000-01-01 00:00:00')
