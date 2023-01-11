@@ -1,6 +1,5 @@
 import { toYear, toNumber, isDate, pad0 } from './utils.js'
-import utcToZonedTime from 'date-fns-tz/utcToZonedTime'
-import zonedTimeToUtc from 'date-fns-tz/zonedTimeToUtc'
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz/esm'
 
 const PROPS = ['year', 'month', 'day', 'hour', 'minute', 'second']
 
