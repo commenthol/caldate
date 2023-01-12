@@ -1,6 +1,6 @@
-
-import moment from 'moment-timezone'
 import { toYear, toNumber, isDate, pad0 } from './utils.js'
+import utcToZonedTime from 'date-fns-tz/utcToZonedTime'
+import zonedTimeToUtc from 'date-fns-tz/zonedTimeToUtc'
 
 const PROPS = ['year', 'month', 'day', 'hour', 'minute', 'second']
 
@@ -180,9 +180,17 @@ export class CalDate {
    * @param {String} timezone - e.g. 'America/New_York'
    * @return {Date}
    */
-  toTimezone (timezone) {
-    if (timezone) {
-      return new Date(moment.tz(this.toString(), timezone).format())
+  toTimezone (timeZone) {
+    if (timeZone) {
+      const returnVar = zonedTimeToUtc(this.toString(), timeZone)
+      // hack alert - tehran has the only timezone which starts daylight saving at midnight (although stopped DST in 2022)
+      // once the bug in zoneTimeToUtc is fixed, delete this hack https://github.com/marnusw/date-fns-tz/issues/222
+      if (timeZone === 'Asia/Tehran') {
+        const i = new Intl.DateTimeFormat('en', { timeZone, hourCycle: 'h23', hour: 'numeric' })
+        const f = parseInt(i.format(returnVar), 10)
+        if (f !== this.hour) returnVar.setHours(returnVar.getHours() + 1)
+      }
+      return returnVar
     } else {
       return this.toDate()
     }
@@ -196,13 +204,13 @@ export class CalDate {
    */
   fromTimezone (dateUTC, timezone) {
     if (timezone) {
-      const m = moment.tz(dateUTC, timezone)
-      this.year = m.year()
-      this.month = m.month() + 1
-      this.day = m.date()
-      this.hour = m.hours()
-      this.minute = m.minutes()
-      this.second = m.seconds()
+      const m = utcToZonedTime(dateUTC, timezone)
+      this.year = m.getFullYear()
+      this.month = m.getMonth() + 1
+      this.day = m.getDate()
+      this.hour = m.getHours()
+      this.minute = m.getMinutes()
+      this.second = m.getSeconds()
     } else {
       this.set(dateUTC)
     }
