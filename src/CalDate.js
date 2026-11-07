@@ -1,41 +1,67 @@
-
 import moment from 'moment-timezone'
 import { toYear, toNumber, isDate, pad0 } from './utils.js'
 
+/**
+ * @typedef {Object} CalDateOptions
+ * @property {number|string} [year]
+ * @property {number|string} [month]
+ * @property {number|string} [day]
+ * @property {number|string} [hour]
+ * @property {number|string} [minute]
+ * @property {number|string} [second]
+ * @property {number} [duration]
+ */
+
+/** @typedef {{number: number|string, unit?: 'd'|'h'|'m'}} CalDateOffset */
+
+/** @type {Array<'year'|'month'|'day'|'hour'|'minute'|'second'>} */
 const PROPS = ['year', 'month', 'day', 'hour', 'minute', 'second']
 
 export class CalDate {
   /**
    * constructs a new CalDate instance
-   * @param {Object|Date} [opts] - See `set(opts)`
+   * @param {CalDateOptions|Date|null} [opts] - See `set(opts)`
    * @example
    * const CalDate = require('caldate')
-   * const caldate = new CalDate('2000-01-01 12:00:00')
+   * const caldate = new CalDate({ year: 2000, month: 1, day: 1, hour: 12 })
    * caldate.year
    * //> 2000
    * caldate.month
    * //> 1
    */
-  constructor (opts) {
+  constructor(opts) {
+    /** @type {number} */
+    this.year = 0
+    /** @type {number} */
+    this.month = 0
+    /** @type {number} */
+    this.day = 0
+    /** @type {number} */
+    this.hour = 0
+    /** @type {number} */
+    this.minute = 0
+    /** @type {number} */
+    this.second = 0
+    /** @type {number} */
+    this.duration = 24
     this.set(opts)
   }
 
-  static toYear (year) {
+  /**
+   * Convert a year-like value to a year number.
+   * @param {number|string|Date|null} [year]
+   * @returns {number|undefined}
+   */
+  static toYear(year) {
     return toYear(year)
   }
 
   /**
    * set calendar date
-   * @param {Object|Date} [opts] - defaults to `1900-01-01`
-   * @param {String} opts.year
-   * @param {String} opts.month - January equals to 1, December to 12
-   * @param {String} opts.day
-   * @param {String} opts.hour
-   * @param {String} opts.minute
-   * @param {String} opts.second
-   * @param {String} opts.duration - defaults to 24 hours
+   * @param {CalDateOptions|Date|null} [opts] - defaults to `1900-01-01`
+   * @returns {this}
    */
-  set (opts) {
+  set(opts) {
     opts = opts || { year: 1900, month: 1, day: 1 }
     if (isDate(opts)) {
       this.year = opts.getFullYear()
@@ -51,46 +77,51 @@ export class CalDate {
       this.month = this.month || 1
       this.day = this.day || 1
     }
-    this.duration = opts.duration || 24 // duration is in hours
+    this.duration =
+      (typeof opts === 'object' &&
+        opts !== null &&
+        'duration' in opts &&
+        opts.duration) ||
+      24 // duration is in hours
     return this
   }
 
   /**
    * checks if Date is equal to `calDate`
    * @param {CalDate} calDate
-   * @return {Boolean} true if date matches
+   * @returns {boolean} true if date matches
    */
-  isEqualDate (calDate) {
-    let res = true
+  isEqualDate(calDate) {
     this.update()
-    ;['year', 'month', 'day'].forEach((p) => {
-      res &= (this[p] === calDate[p])
-    })
-    return !!res
+    return [
+      this.year === calDate.year,
+      this.month === calDate.month,
+      this.day === calDate.day
+    ].every(Boolean)
   }
 
   /**
    * get day of week
-   * @return {Number} day of week 0=sunday, 1=monday, ...
+   * @returns {number} day of week 0=sunday, 1=monday, ...
    */
-  getDay () {
+  getDay() {
     return this.toDate().getDay()
   }
 
   /**
    * set offset per unit
-   * @param {Number} number
-   * @param {String} [unit='d'] - Unit in days `d`, hours `h, minutes `m`
-   * @return {Object} this
+   * @param {number|string|CalDateOffset} number
+   * @param {'d'|'h'|'m'} [unit='d'] - Unit in days `d`, hours `h`, or minutes `m`
+   * @returns {this}
    */
-  setOffset (number, unit) {
+  setOffset(number, unit) {
     if (number) {
       if (typeof number === 'object') {
         unit = number.unit
         number = number.number
       }
       unit = unit || 'd'
-      number = parseFloat(number, 10)
+      number = parseFloat(String(number))
       if (isNaN(number)) {
         throw new Error('Number required')
       }
@@ -122,12 +153,12 @@ export class CalDate {
 
   /**
    * set time per hour, minute or second while maintaining duration at midnight
-   * @param {Number} [hour]
-   * @param {Number} [minute]
-   * @param {Number} [second]
-   * @return {Object} this
+   * @param {number} [hour]
+   * @param {number} [minute]
+   * @param {number} [second]
+   * @returns {this}
    */
-  setTime (hour, minute, second) {
+  setTime(hour, minute, second) {
     hour = hour || 0
     minute = minute || 0
     second = second || 0
@@ -142,19 +173,19 @@ export class CalDate {
 
   /**
    * set duration in hours
-   * @param {Number} duration in hours
-   * @return {Object} this
+   * @param {number} duration - Duration in hours
+   * @returns {this}
    */
-  setDuration (duration) {
+  setDuration(duration) {
     this.duration = duration
     return this
   }
 
   /**
    * update internal data to real date
-   * @return {Object} this
+   * @returns {this}
    */
-  update () {
+  update() {
     if (this.year) {
       const d = new CalDate(this.toDate())
       PROPS.forEach((p) => {
@@ -168,19 +199,19 @@ export class CalDate {
    * get end date of calendar date
    * @return {CalDate}
    */
-  toEndDate () {
+  toEndDate() {
     const d = new CalDate(this.toDate())
-    d.minute += ((this.duration * 60) | 0)
+    d.minute += (this.duration * 60) | 0
     d.update()
     return d
   }
 
   /**
    * move internal date to a date in `timezone`
-   * @param {String} timezone - e.g. 'America/New_York'
-   * @return {Date}
+   * @param {string} [timezone] - e.g. 'America/New_York'
+   * @returns {Date}
    */
-  toTimezone (timezone) {
+  toTimezone(timezone) {
     if (timezone) {
       return new Date(moment.tz(this.toString(), timezone).format())
     } else {
@@ -191,10 +222,10 @@ export class CalDate {
   /**
    * set date from a given `timezone`
    * @param {Date} dateUTC - date in UTC
-   * @param {String} [timezone] - timezone of dateUTC, e.g. 'America/New_York'
-   * @return {CalDate} self
+   * @param {string} [timezone] - timezone of dateUTC, e.g. 'America/New_York'
+   * @returns {this} self
    */
-  fromTimezone (dateUTC, timezone) {
+  fromTimezone(dateUTC, timezone) {
     if (timezone) {
       const m = moment.tz(dateUTC, timezone)
       this.year = m.year()
@@ -211,34 +242,46 @@ export class CalDate {
 
   /**
    * convert to Date
-   * @return {Date}
+   * @returns {Date}
    */
-  toDate () {
+  toDate() {
     return new Date(
-      this.year, this.month - 1, this.day,
-      this.hour, this.minute, this.second, 0
+      this.year,
+      this.month - 1,
+      this.day,
+      this.hour,
+      this.minute,
+      this.second,
+      0
     )
   }
 
   /**
-   * get Date in ISO format
+   * Get the date in ISO format.
+   * @returns {string}
    */
-  toISOString () {
+  toISOString() {
     return this.toString(true)
   }
 
   /**
-   * get Date as String `YYYY-MM-DD HH:MM:SS`
+   * Get the date as `YYYY-MM-DD HH:MM:SS` (or ISO format when `iso` is true).
+   * @param {boolean} [iso=false]
+   * @returns {string}
    */
-  toString (iso) {
+  toString(iso) {
     const d = new CalDate(this.toDate())
     return (
-      pad0(d.year, 4) + '-' +
-      pad0(d.month) + '-' +
+      pad0(d.year, 4) +
+      '-' +
+      pad0(d.month) +
+      '-' +
       pad0(d.day) +
       (iso ? 'T' : ' ') +
-      pad0(d.hour) + ':' +
-      pad0(d.minute) + ':' +
+      pad0(d.hour) +
+      ':' +
+      pad0(d.minute) +
+      ':' +
       pad0(d.second) +
       (iso ? 'Z' : '')
     )

@@ -1,5 +1,5 @@
 export default {
-  input: './src/index.js',
+  input: ['./src/index.js'],
   output: {
     dir: 'lib',
     format: 'cjs',

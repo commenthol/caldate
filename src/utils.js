@@ -1,35 +1,47 @@
-function objectToString (o) {
-  return Object.prototype.toString.call(o)
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
+function objectToString(value) {
+  return Object.prototype.toString.call(value)
 }
 
-export function isObject (arg) {
+/**
+ * @param {unknown} arg
+ * @returns {arg is object}
+ */
+export function isObject(arg) {
   return typeof arg === 'object' && arg !== null
 }
 
-export function isDate (d) {
-  return isObject(d) && objectToString(d) === '[object Date]'
+/**
+ * @param {unknown} value
+ * @returns {value is Date}
+ */
+export function isDate(value) {
+  return isObject(value) && objectToString(value) === '[object Date]'
 }
 
 /**
  * pad number with `0`
  * @param {number} number
- * @param {number} [len] - length
- * @return {string} padded string
+ * @param {number} [len=2] - desired output length
+ * @returns {string} padded string
  */
-export function pad0 (number, len) {
+export function pad0(number, len) {
   len = len || 2
-  number = Array(len).join('0') + number.toString()
-  return number.substr(number.length - len, len)
+  const value = Array(len).join('0') + number.toString()
+  return value.slice(value.length - len)
 }
 
 /**
- * convert string to number
+ * Convert a value to an integer.
  * @private
- * @param {String} str
- * @return {Number} converted number or undefined
+ * @param {number|string|null|undefined} str
+ * @returns {number|undefined} converted number or undefined
  */
-export function toNumber (str) {
-  const num = parseInt(str, 10)
+export function toNumber(str) {
+  const num = parseInt(String(str), 10)
   if (!isNaN(num)) {
     return num
   }
@@ -38,16 +50,18 @@ export function toNumber (str) {
 /**
  * extract or set year
  * @private
- * @param {Number|Date|String} year
- * @return {Number} year
+ * @param {number|string|Date|null} [year]
+ * @returns {number|undefined} year
  */
-export function toYear (year) {
+export function toYear(year) {
   if (!year) {
-    year = new Date().getFullYear()
-  } else if (isDate(year)) {
-    year = year.getFullYear()
-  } else if (typeof year === 'string') {
-    year = toNumber(year)
+    return new Date().getFullYear()
+  }
+  if (isDate(year)) {
+    return year.getFullYear()
+  }
+  if (typeof year === 'string') {
+    return toNumber(year)
   }
   return year
 }
