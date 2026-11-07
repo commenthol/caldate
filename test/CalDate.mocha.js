@@ -105,9 +105,7 @@ describe('#CalDate', function () {
 
   it('can set date for timezone', function () {
     const caldate = new CalDate()
-    caldate.fromTimezone(
-      new Date('2016-12-31T13:00:00Z'), 'Australia/Sydney'
-    )
+    caldate.fromTimezone(new Date('2016-12-31T13:00:00Z'), 'Australia/Sydney')
     assert.strictEqual(caldate.toString(), '2017-01-01 00:00:00')
   })
 
@@ -194,7 +192,7 @@ describe('#CalDate', function () {
   })
 
   it('can get current year', function () {
-    const exp = (new Date()).getFullYear()
+    const exp = new Date().getFullYear()
     const res = CalDate.toYear()
     assert.strictEqual(res, exp)
   })
