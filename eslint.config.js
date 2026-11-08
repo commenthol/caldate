@@ -4,7 +4,7 @@ import globals from 'globals'
 
 export default [
   {
-    ignores: ['coverage/**', 'data/**', 'lib/**', 'lib.*/**', 'tmp/**', 'es/**']
+    ignores: ['coverage/**', 'lib/**', 'tmp/**', 'types/**']
   },
   js.configs.recommended,
   {
