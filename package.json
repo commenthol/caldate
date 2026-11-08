@@ -40,16 +40,15 @@
     "types"
   ],
   "scripts": {
-    "all": "run-s clean pretty lint types build test types",
+    "all": "run-s clean pretty lint types build coverage types",
     "build": "rollup -c",
     "ci": "run-s all",
     "clean": "rimraf lib types coverage",
     "clean:all": "run-s clean clean:node_modules",
     "clean:node_modules": "rimraf node_modules",
-    "coverage": "c8 -r text -r html npm run test:ci",
+    "coverage": "c8 -r text -r html npm run test",
     "lint": "eslint src test",
     "pretty": "prettier -w src test",
-    "readme": "markedpp --githubid -i README.md -o README.md",
     "test": "mocha",
     "types": "tsc -p ./tsconfig.json"
   },

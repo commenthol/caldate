@@ -18,11 +18,14 @@ export default [
       }
     },
     rules: {
-      'no-unused-vars': ['error', {
-        args: 'after-used',
-        argsIgnorePattern: '^_',
-        caughtErrors: 'none'
-      }]
+      'no-unused-vars': [
+        'error',
+        {
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'none'
+        }
+      ]
     }
   },
   eslintConfigPrettier

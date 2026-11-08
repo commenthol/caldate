@@ -11,11 +11,11 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: "Tag, or commit SHA to checkout (optional)"
+        description: 'Tag, or commit SHA to checkout (optional)'
         required: false
 
 env:
-  CI: "true"
+  CI: 'true'
 
 jobs:
   build:

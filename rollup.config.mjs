@@ -4,7 +4,7 @@ export default {
     dir: 'lib',
     format: 'cjs',
     entryFileNames: '[name].cjs',
-    preserveModules: true,
-    exports: 'auto'
+    exports: 'auto',
+    preserveModules: true
   }
 }

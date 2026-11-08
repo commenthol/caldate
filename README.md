@@ -5,28 +5,27 @@
 [![NPM version](https://badge.fury.io/js/caldate.svg)](https://www.npmjs.com/package/caldate/)
 [![Build Status](https://github.com/commenthol/caldate/workflows/CI/badge.svg?branch=master&event=push)](https://github.com/commenthol/caldate/actions/workflows/ci.yml?query=branch%3Amaster)
 
-
 ## Table of Contents
 
 <!-- !toc (minlevel=2 omit="Table of Contents") -->
 
-* [Class: CalDate](#class-caldate)
-  * [new CalDate(opts)](#new-caldateopts)
-  * [CalDate.set(opts)](#caldatesetopts)
-  * [CalDate.isEqualDate(calDate)](#caldateisequaldatecaldate)
-  * [CalDate.getDay()](#caldategetday)
-  * [CalDate.setOffset(number, unit)](#caldatesetoffsetnumber-unit)
-  * [CalDate.setTime(hour, minute, second)](#caldatesettimehour-minute-second)
-  * [CalDate.setDuration(duration)](#caldatesetdurationduration)
-  * [CalDate.update()](#caldateupdate)
-  * [CalDate.toEndDate()](#caldatetoenddate)
-  * [CalDate.toTimezone(timezone)](#caldatetotimezonetimezone)
-  * [CalDate.toDate()](#caldatetodate)
-  * [CalDate.toISOString()](#caldatetoisostring)
-  * [CalDate.toString()](#caldatetostring)
-* [Contribution and License Agreement](#contribution-and-license-agreement)
-* [License](#license)
-* [References](#references)
+- [Class: CalDate](#class-caldate)
+  - [new CalDate(opts)](#new-caldateopts)
+  - [CalDate.set(opts)](#caldatesetopts)
+  - [CalDate.isEqualDate(calDate)](#caldateisequaldatecaldate)
+  - [CalDate.getDay()](#caldategetday)
+  - [CalDate.setOffset(number, unit)](#caldatesetoffsetnumber-unit)
+  - [CalDate.setTime(hour, minute, second)](#caldatesettimehour-minute-second)
+  - [CalDate.setDuration(duration)](#caldatesetdurationduration)
+  - [CalDate.update()](#caldateupdate)
+  - [CalDate.toEndDate()](#caldatetoenddate)
+  - [CalDate.toTimezone(timezone)](#caldatetotimezonetimezone)
+  - [CalDate.toDate()](#caldatetodate)
+  - [CalDate.toISOString()](#caldatetoisostring)
+  - [CalDate.toString()](#caldatetostring)
+- [Contribution and License Agreement](#contribution-and-license-agreement)
+- [License](#license)
+- [References](#references)
 
 <!-- toc! -->
 
@@ -40,8 +39,8 @@ constructs a new CalDate instance
 
 **opts**: `Object | Date`, See `set(opts)`
 
-
 **Example**:
+
 ```js
 // ES5
 import CalDate from 'caldate'
@@ -76,7 +75,6 @@ set calendar date
 **opts.second**: `String`, set calendar date
 
 **opts.duration**: `String`, defaults to 24 hours
-
 
 ### CalDate.isEqualDate(calDate)
 
@@ -174,11 +172,9 @@ convert to Date
 
 get Date in ISO format
 
-
 ### CalDate.toString()
 
 get Date as String `YYYY-MM-DD HH:MM:SS`
-
 
 ## Contribution and License Agreement
 
@@ -197,7 +193,7 @@ See [LICENSE][] for more information.
 
 <!-- !ref -->
 
-* [LICENSE][LICENSE]
+- [LICENSE][LICENSE]
 
 <!-- ref! -->
 
