@@ -11,6 +11,7 @@ export type CalDateOffset = {
     number: number | string;
     unit?: 'd' | 'h' | 'm';
 };
+export type TimezoneAdapter = import('./utils.js').TimezoneAdapter;
 export declare class CalDate {
     /** @type {number} */
     year: number;
@@ -95,16 +96,18 @@ export declare class CalDate {
     /**
      * move internal date to a date in `timezone`
      * @param {string} [timezone] - e.g. 'America/New_York'
+     * @param {TimezoneAdapter} [timezoneAdapter=temporalTimezoneAdapter]
      * @returns {Date}
      */
-    toTimezone(timezone?: string): Date;
+    toTimezone(timezone?: string, timezoneAdapter?: TimezoneAdapter): Date;
     /**
      * set date from a given `timezone`
      * @param {Date} dateUTC - date in UTC
      * @param {string} [timezone] - timezone of dateUTC, e.g. 'America/New_York'
+     * @param {TimezoneAdapter} [timezoneAdapter=temporalTimezoneAdapter]
      * @returns {this} self
      */
-    fromTimezone(dateUTC: Date, timezone?: string): this;
+    fromTimezone(dateUTC: Date, timezone?: string, timezoneAdapter?: TimezoneAdapter): this;
     /**
      * convert to Date
      * @returns {Date}
@@ -116,7 +119,7 @@ export declare class CalDate {
      */
     toISOString(): string;
     /**
-     * Get the date as `YYYY-MM-DD HH:MM:SS` (or ISO format when `iso` is true).
+     * Get the date as `yyyy-mm-dd HH:MM:SS` (or ISO format when `iso` is true).
      * @param {boolean} [iso=false]
      * @returns {string}
      */

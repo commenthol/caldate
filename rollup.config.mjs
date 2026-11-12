@@ -1,5 +1,5 @@
 export default {
-  input: ['./src/index.js'],
+  input: ['./src/index.js', './src/moment-timezone.js'],
   output: {
     dir: 'lib',
     format: 'cjs',
