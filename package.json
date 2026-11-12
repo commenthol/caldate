@@ -22,6 +22,7 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "import": "./src/index.js",
       "require": "./lib/index.cjs"
     },
@@ -29,7 +30,7 @@
   },
   "main": "./lib/index.cjs",
   "module": "./src/index.js",
-  "types": "./types",
+  "types": "./types/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "test"
