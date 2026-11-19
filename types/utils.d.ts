@@ -29,3 +29,33 @@ export declare function toNumber(str: number | string | null | undefined): numbe
  * @returns {number|undefined} year
  */
 export declare function toYear(year?: number | string | Date | null): number | undefined;
+/**
+ * move a date string to a different timezone using the Temporal API
+ * @param {string} dateStr `YYYY-MM-DD hh:mm`
+ * @param {string} timezone `+08:00`|`Asia/Shanghai`
+ * @returns {Date}
+ */
+export declare function toTimezone(dateStr: string, timezone: string): Date;
+/**
+ * get date components in a given timezone using the Temporal API
+ * @param {Date} dateUTC
+ * @param {string} timezone - IANA time zone or fixed offset, e.g. `+08:00`
+ * @returns {{year: number, month: number, day: number, hour: number, minute: number, second: number}}
+ */
+export declare function fromTimezone(dateUTC: Date, timezone: string): {
+    year: number;
+    month: number;
+    day: number;
+    hour: number;
+    minute: number;
+    second: number;
+};
+export type TimezoneAdapter = {
+    toTimezone: typeof toTimezone;
+    fromTimezone: typeof fromTimezone;
+};
+/**
+ * @typedef {{toTimezone: typeof toTimezone, fromTimezone: typeof fromTimezone}} TimezoneAdapter
+ */
+/** @type {TimezoneAdapter} */
+export declare const temporalTimezoneAdapter: TimezoneAdapter;

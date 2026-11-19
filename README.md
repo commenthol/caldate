@@ -19,7 +19,7 @@
   - [CalDate.setDuration(duration)](#caldatesetdurationduration)
   - [CalDate.update()](#caldateupdate)
   - [CalDate.toEndDate()](#caldatetoenddate)
-  - [CalDate.toTimezone(timezone)](#caldatetotimezonetimezone)
+  - [CalDate.toTimezone(timezone, timezoneAdapter)](#caldatetotimezonetimezonetimezoneadapter)
   - [CalDate.toDate()](#caldatetodate)
   - [CalDate.toISOString()](#caldatetoisostring)
   - [CalDate.toString()](#caldatetostring)
@@ -140,17 +140,19 @@ get end date of calendar date
 
 **Returns**: `CalDate`
 
-### CalDate.toTimezone(timezone)
+### CalDate.toTimezone(timezone, timezoneAdapter)
 
-move internal date to a date in `timezone`
+move internal date to a date in `timezone`. If no adapter is supplied, Temporal is used.
 
 **Parameters**
 
 **timezone**: `String`, e.g. 'America/New_York'
 
+**timezoneAdapter**: `TimezoneAdapter`, optional adapter; defaults to `temporalTimezoneAdapter`
+
 **Returns**: `Date`
 
-### CalDate.fromTimezone(dateUTC, timezone)
+### CalDate.fromTimezone(dateUTC, timezone, timezoneAdapter)
 
 set date from a given `timezone`
 
@@ -160,7 +162,19 @@ set date from a given `timezone`
 
 **timezone**: `String`, timezone of dateUTC, e.g. 'America/New_York'
 
+**timezoneAdapter**: `TimezoneAdapter`, optional adapter; defaults to `temporalTimezoneAdapter`
+
 **Returns**: `CalDate` self
+
+Example using the opt-in Moment adapter:
+
+```js
+import CalDate from 'caldate'
+import { momentTimezoneAdapter } from 'caldate/moment-timezone'
+
+const date = new CalDate({ year: 2026, month: 12, day: 25 })
+date.toTimezone('America/Havana', momentTimezoneAdapter)
+```
 
 ### CalDate.toDate()
 

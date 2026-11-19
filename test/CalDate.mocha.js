@@ -1,7 +1,8 @@
 import assert from 'assert'
 import CalDate from '../src/index.js'
+import { momentTimezoneAdapter } from '../src/moment-timezone.js'
 
-describe('#CalDate', function () {
+function tests(timezoneAdapter) {
   it('can return 1900-01-01 if undefined', function () {
     const caldate = new CalDate()
     const res = caldate.toString()
@@ -90,9 +91,17 @@ describe('#CalDate', function () {
     assert.strictEqual(res, true)
   })
 
-  it('can move date by timezone', function () {
+  it('can move date by timezone America/New_York', function () {
     const caldate = new CalDate(new Date('2000-01-01 00:00:00'))
-    const res = caldate.toTimezone('America/New_York').toISOString()
+    const res = caldate
+      .toTimezone('America/New_York', timezoneAdapter)
+      .toISOString()
+    assert.strictEqual(res, '2000-01-01T05:00:00.000Z')
+  })
+
+  it('can move date by timezone -05:00', function () {
+    const caldate = new CalDate(new Date('2000-01-01 00:00:00'))
+    const res = caldate.toTimezone('-05:00', timezoneAdapter).toISOString()
     assert.strictEqual(res, '2000-01-01T05:00:00.000Z')
   })
 
@@ -105,8 +114,32 @@ describe('#CalDate', function () {
 
   it('can set date for timezone', function () {
     const caldate = new CalDate()
-    caldate.fromTimezone(new Date('2016-12-31T13:00:00Z'), 'Australia/Sydney')
+    caldate.fromTimezone(
+      new Date('2016-12-31T13:00:00Z'),
+      'Australia/Sydney',
+      timezoneAdapter
+    )
     assert.strictEqual(caldate.toString(), '2017-01-01 00:00:00')
+  })
+
+  it('can set date for timezone Asia/Shanghai', function () {
+    const caldate = new CalDate()
+    caldate.fromTimezone(
+      new Date('2000-01-01T00:00:00Z'),
+      'Asia/Shanghai',
+      timezoneAdapter
+    )
+    assert.strictEqual(caldate.toString(), '2000-01-01 08:00:00')
+  })
+
+  it('can set date for timezone +08:00', function () {
+    const caldate = new CalDate()
+    caldate.fromTimezone(
+      new Date('2000-01-01T00:00:00Z'),
+      '+08:00',
+      timezoneAdapter
+    )
+    assert.strictEqual(caldate.toString(), '2000-01-01 08:00:00')
   })
 
   it('can set date without a timezone', function () {
@@ -143,6 +176,16 @@ describe('#CalDate', function () {
     assert.strictEqual(res, '2000-01-01T12:00:00Z')
   })
 
+  it('can set offset in minutes', function () {
+    const negative = new CalDate({ year: 2000, month: 1, day: 1 })
+    negative.setOffset(-360, 'm')
+    assert.strictEqual(negative.toString(), '1999-12-31 18:00:00')
+
+    const positive = new CalDate({ year: 2000, month: 1, day: 1 })
+    positive.setOffset(90, 'm')
+    assert.strictEqual(positive.toString(), '2000-01-01 01:30:00')
+  })
+
   it('can set offset in hours using a fraction', function () {
     const caldate = new CalDate(new Date('2000-01-01 00:00:00'))
     caldate.setOffset({ number: 12.555, unit: 'h' })
@@ -171,6 +214,15 @@ describe('#CalDate', function () {
     assert.strictEqual(res, '2000-01-01T12:00:00Z')
     res = caldate.toEndDate().toISOString()
     assert.strictEqual(res, '2000-01-02T00:00:00Z')
+  })
+
+  it('preserves seconds when calculating the end date', function () {
+    const caldate = new CalDate(new Date('2000-01-01 00:00:00'))
+    caldate.setTime(12, 0, 15)
+    assert.strictEqual(
+      caldate.toEndDate().toISOString(),
+      '2000-01-02T00:00:00Z'
+    )
   })
 
   it('can set duration', function () {
@@ -202,5 +254,39 @@ describe('#CalDate', function () {
     const exp = new Date().getFullYear()
     const res = CalDate.toYear()
     assert.strictEqual(res, exp)
+  })
+}
+
+describe('#CalDate', function () {
+  tests()
+
+  it('Navidad en 2026 en Cuba', function () {
+    const caldate = new CalDate({ year: 2026, month: 12, day: 25 })
+    const res = caldate.toTimezone('America/Havana').toISOString()
+    assert.strictEqual(res, '2026-12-25T05:00:00.000Z')
+  })
+})
+
+describe('#CalDate with moment-timezone adapter', function () {
+  tests(momentTimezoneAdapter)
+
+  it('Navidad en 2026 en Cuba', function () {
+    const caldate = new CalDate({ year: 2026, month: 12, day: 25 })
+    const res = caldate
+      .toTimezone('America/Havana', momentTimezoneAdapter)
+      .toISOString()
+    assert.strictEqual(res, '2026-12-25T04:00:00.000Z')
+  })
+
+  it('requires a complete timezone adapter', function () {
+    const caldate = new CalDate({ year: 2026, month: 12, day: 25 })
+    assert.throws(
+      () => caldate.toTimezone('America/Havana', { toTimezone() {} }),
+      {
+        name: 'TypeError',
+        message:
+          'timezoneAdapter must provide toTimezone and fromTimezone functions'
+      }
+    )
   })
 })

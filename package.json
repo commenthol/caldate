@@ -1,6 +1,6 @@
 {
   "name": "caldate",
-  "version": "2.1.0",
+  "version": "3.0.0-1",
   "description": "Calendar date for date-holidays",
   "keywords": [
     "calendar",
@@ -26,11 +26,13 @@
       "import": "./src/index.js",
       "require": "./lib/index.cjs"
     },
+    "./moment-timezone": {
+      "types": "./types/moment-timezone.d.ts",
+      "import": "./src/moment-timezone.js",
+      "require": "./lib/moment-timezone.cjs"
+    },
     "./package.json": "./package.json"
   },
-  "main": "./lib/index.cjs",
-  "module": "./src/index.js",
-  "types": "./types/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "test"
@@ -50,7 +52,7 @@
     "coverage": "c8 -r text -r html npm run test",
     "lint": "eslint src test",
     "pretty": "prettier -w src test",
-    "test": "mocha",
+    "test": "mocha --node-option harmony-temporal",
     "types": "tsc -p ./tsconfig.json"
   },
   "mocha": {
@@ -69,12 +71,12 @@
     "globals": "^17.14.0",
     "mocha": "^12.0.3",
     "npm-run-all2": "^9.0.4",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.1",
     "rimraf": "^6.1.4",
-    "rollup": "^4.67.5",
+    "rollup": "^4.68.3",
     "typescript": "^7.0.2"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=26.0.0"
   }
 }

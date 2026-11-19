@@ -1,5 +1,10 @@
-import moment from 'moment-timezone'
-import { toYear, toNumber, isDate, pad0 } from './utils.js'
+import {
+  toYear,
+  toNumber,
+  isDate,
+  pad0,
+  temporalTimezoneAdapter
+} from './utils.js'
 
 /**
  * @typedef {Object} CalDateOptions
@@ -13,9 +18,23 @@ import { toYear, toNumber, isDate, pad0 } from './utils.js'
  */
 
 /** @typedef {{number: number|string, unit?: 'd'|'h'|'m'}} CalDateOffset */
+/** @typedef {import('./utils.js').TimezoneAdapter} TimezoneAdapter */
 
 /** @type {Array<'year'|'month'|'day'|'hour'|'minute'|'second'>} */
 const PROPS = ['year', 'month', 'day', 'hour', 'minute', 'second']
+
+function getTimezoneAdapter(timezoneAdapter) {
+  const adapter = timezoneAdapter ?? temporalTimezoneAdapter
+  if (
+    typeof adapter.toTimezone !== 'function' ||
+    typeof adapter.fromTimezone !== 'function'
+  ) {
+    throw new TypeError(
+      'timezoneAdapter must provide toTimezone and fromTimezone functions'
+    )
+  }
+  return adapter
+}
 
 export class CalDate {
   /**
@@ -132,6 +151,10 @@ export class CalDate {
         number -= o.day
         number *= 24
       }
+      if (unit === 'm') {
+        o.hour = (number / 60) | 0
+        number -= o.hour * 60
+      }
       if (unit === 'd' || unit === 'h') {
         o.hour = (number % 24) | 0
         number -= o.hour
@@ -162,7 +185,7 @@ export class CalDate {
     hour = hour || 0
     minute = minute || 0
     second = second || 0
-    // the holiday usually ends at midnight - if this is not the case set different duration explicitely
+    // the holiday usually ends at midnight - if this is not the case set different duration explicitly
     this.duration = 24 - (hour + minute / 60 + second / 3600)
     this.hour = hour
     this.minute = minute
@@ -201,7 +224,7 @@ export class CalDate {
    */
   toEndDate() {
     const d = new CalDate(this.toDate())
-    d.minute += (this.duration * 60) | 0
+    d.second += Math.round(this.duration * 3600)
     d.update()
     return d
   }
@@ -209,11 +232,15 @@ export class CalDate {
   /**
    * move internal date to a date in `timezone`
    * @param {string} [timezone] - e.g. 'America/New_York'
+   * @param {TimezoneAdapter} [timezoneAdapter=temporalTimezoneAdapter]
    * @returns {Date}
    */
-  toTimezone(timezone) {
+  toTimezone(timezone, timezoneAdapter) {
     if (timezone) {
-      return new Date(moment.tz(this.toString(), timezone).format())
+      return getTimezoneAdapter(timezoneAdapter).toTimezone(
+        this.toString(),
+        timezone
+      )
     } else {
       return this.toDate()
     }
@@ -223,17 +250,15 @@ export class CalDate {
    * set date from a given `timezone`
    * @param {Date} dateUTC - date in UTC
    * @param {string} [timezone] - timezone of dateUTC, e.g. 'America/New_York'
+   * @param {TimezoneAdapter} [timezoneAdapter=temporalTimezoneAdapter]
    * @returns {this} self
    */
-  fromTimezone(dateUTC, timezone) {
+  fromTimezone(dateUTC, timezone, timezoneAdapter) {
     if (timezone) {
-      const m = moment.tz(dateUTC, timezone)
-      this.year = m.year()
-      this.month = m.month() + 1
-      this.day = m.date()
-      this.hour = m.hours()
-      this.minute = m.minutes()
-      this.second = m.seconds()
+      Object.assign(
+        this,
+        getTimezoneAdapter(timezoneAdapter).fromTimezone(dateUTC, timezone)
+      )
     } else {
       this.set(dateUTC)
     }
@@ -265,7 +290,7 @@ export class CalDate {
   }
 
   /**
-   * Get the date as `YYYY-MM-DD HH:MM:SS` (or ISO format when `iso` is true).
+   * Get the date as `yyyy-mm-dd HH:MM:SS` (or ISO format when `iso` is true).
    * @param {boolean} [iso=false]
    * @returns {string}
    */
